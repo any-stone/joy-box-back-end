@@ -6,7 +6,7 @@ async function getAllPlaygrounds(req, res) {
   try {
     const playgrounds = await Playground.findAll({
       where: { userId: req.user.id },
-      include: { model: User, as: 'user', attributes: ['id', 'name', 'email'] }
+      include: { model: User, as: 'User', attributes: ['id', 'name', 'email'] }
     })
     res.json(playgrounds)
   } catch (err) {
