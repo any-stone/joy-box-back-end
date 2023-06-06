@@ -13,7 +13,6 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       User.hasOne(models.Profile, { as: 'profile', foreignKey: 'userId' })
-      User.hasMany(models.Playground, { as: 'playgrounds', foreignKey: 'userId' })
     }
 
     async comparePassword(tryPassword) {

@@ -4,11 +4,15 @@ const { Model } = require('sequelize')
 module.exports = (sequelize, DataTypes) => {
   class Playground extends Model {
     static associate(models) {
-      Playground.belongsTo(models.User, { foreignKey: 'userId' })
+      Playground.belongsTo(models.Profile, { foreignKey: 'profileId' })
     }
   }
 
   Playground.init({
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
     html: {
       type: DataTypes.TEXT,
       allowNull: false,
@@ -21,15 +25,14 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.TEXT,
       allowNull: false,
     },
-    userId: {
+    profileId: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      onDelete: 'CASCADE',
       references: {
-        model: 'Users',
+        model: 'Profiles',
         key: 'id',
       },
-    },
+    }
   },
   {
     sequelize,

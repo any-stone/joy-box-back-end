@@ -1,12 +1,12 @@
 'use strict'
 const pusher = require('../pusher')
-const { Playground, User } = require('../models')
+const { Playground, Profile } = require('../models')
 
 async function getAllPlaygrounds(req, res) {
   try {
     const playgrounds = await Playground.findAll({
-      where: { userId: req.user.id },
-      include: { model: User, as: 'User', attributes: ['id', 'name', 'email'] }
+      where: { profileId: req.user.profile.id },
+      include: { model: Profile, as: 'profile', attributes: ['id', 'name'] }
     })
     res.json(playgrounds)
   } catch (err) {
@@ -18,7 +18,7 @@ async function getAllPlaygrounds(req, res) {
 async function getPlayground(req, res) {
   try {
     const playground = await Playground.findOne({
-      where: { id: req.params.id, userId: req.user.id }
+      where: { id: req.params.id, profileId: req.user.profile.id }
     })
     if (!playground) return res.status(404).json({ message: 'Playground not found' })
     res.json(playground)
@@ -30,8 +30,7 @@ async function getPlayground(req, res) {
 
 async function createPlayground(req, res) {
   try {
-    const playground = await Playground.create({ ...req.body, userId: req.user.id })
-    // Trigger a Pusher event
+    const playground = await Playground.create({ ...req.body, profileId: req.user.profile.id })
     pusher.trigger('playground', 'created', playground)
     res.status(201).json(playground)
   } catch (err) {
@@ -43,12 +42,11 @@ async function createPlayground(req, res) {
 async function updatePlayground(req, res) {
   try {
     const playground = await Playground.findOne({
-      where: { id: req.params.id, userId: req.user.id }
+      where: { id: req.params.id, profileId: req.user.profile.id }
     })
     if (!playground) return res.status(404).json({ message: 'Playground not found' })
 
     const updatedPlayground = await playground.update(req.body)
-    // Trigger a Pusher event
     pusher.trigger('playground', 'updated', updatedPlayground)
     res.json(updatedPlayground)
   } catch (err) {
@@ -57,15 +55,13 @@ async function updatePlayground(req, res) {
   }
 }
 
-
 async function deletePlayground(req, res) {
   try {
     const playground = await Playground.findOne({
-      where: { id: req.params.id, userId: req.user.id }
+      where: { id: req.params.id, profileId: req.user.profile.id }
     })
     if (!playground) return res.status(404).json({ message: 'Playground not found' })
     await playground.destroy()
-    // Trigger a Pusher event
     pusher.trigger('playground', 'deleted', { id: req.params.id })
     res.json({ message: 'Playground deleted successfully' })
   } catch (err) {
@@ -74,4 +70,10 @@ async function deletePlayground(req, res) {
   }
 }
 
-module.exports = { getAllPlaygrounds, getPlayground, createPlayground, updatePlayground, deletePlayground }
+module.exports = { 
+  getAllPlaygrounds, 
+  getPlayground, 
+  createPlayground, 
+  updatePlayground, 
+  deletePlayground 
+}
