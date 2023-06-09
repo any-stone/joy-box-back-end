@@ -70,10 +70,10 @@ async function deletePlayground(req, res) {
   }
 }
 
-module.exports = { 
-  getAllPlaygrounds, 
-  getPlayground, 
-  createPlayground, 
-  updatePlayground, 
-  deletePlayground 
+module.exports = {
+  getAllPlaygrounds,
+  getPlayground,
+  createPlayground,
+  updatePlayground,
+  deletePlayground
 }

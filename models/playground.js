@@ -34,10 +34,10 @@ module.exports = (sequelize, DataTypes) => {
       },
     }
   },
-  {
-    sequelize,
-    modelName: 'Playground',
-  })
+    {
+      sequelize,
+      modelName: 'Playground',
+    })
 
   return Playground
 }
