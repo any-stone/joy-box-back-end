@@ -6,6 +6,9 @@
 app = "joybox-new"
 primary_region = "yyz"
 
+[env]
+  PORT = "8080"
+
 [http_service]
   internal_port = 3000
   force_https = true
